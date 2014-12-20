@@ -1,0 +1,22 @@
+#!/usr/bin/env ruby
+
+%w(boot).each do |file_name|
+  require File.expand_path "../../config/#{file_name}", __FILE__
+end
+
+begin
+  require 'pry'
+  Interpreter = Pry
+rescue LoadError
+  require 'irb'
+  require 'irb/completion'
+  Interpreter = IRB
+end
+
+root_dir = File.expand_path '../..', __FILE__
+Dir[File.join(root_dir, 'lib', '**', '*.rb')].each do |file|
+  require file
+end
+
+# START
+Interpreter.start
